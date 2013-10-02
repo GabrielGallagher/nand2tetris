@@ -1,0 +1,35 @@
+/** 4 Way 16-bit Multiplexor (selector) **/
+//The 4 way 16 bit multiplexor takes 4 sets of 16bit inputs, and selects
+//one of the 4 sets based on the value of the 2bit selector.
+// out = a if sel==00
+//      b if sel==01
+//      c if sel==10
+//      d if sel==11
+
+CHIP Mux4Way16 {
+
+IN a[16], b[16], c[16], d[16], sel[2];
+OUT out[16];
+
+PARTS:
+
+//We pass the corresponding bits of each 16bit input set through a 4 way mux chip.
+//The value of the 2bit selector is passed to each of the 4 way mux gates to
+//ensure that each time, only the bit from the desired set is selected.
+Mux4Way(a=a[0], b=b[0], c=c[0], d=d[0], sel[0]=sel[0], sel[1]=sel[1], out=out[0]);
+Mux4Way(a=a[1], b=b[1], c=c[1], d=d[1], sel[0]=sel[0], sel[1]=sel[1], out=out[1]);
+Mux4Way(a=a[2], b=b[2], c=c[2], d=d[2], sel[0]=sel[0], sel[1]=sel[1], out=out[2]);
+Mux4Way(a=a[3], b=b[3], c=c[3], d=d[3], sel[0]=sel[0], sel[1]=sel[1], out=out[3]);
+Mux4Way(a=a[4], b=b[4], c=c[4], d=d[4], sel[0]=sel[0], sel[1]=sel[1], out=out[4]);
+Mux4Way(a=a[5], b=b[5], c=c[5], d=d[5], sel[0]=sel[0], sel[1]=sel[1], out=out[5]);
+Mux4Way(a=a[6], b=b[6], c=c[6], d=d[6], sel[0]=sel[0], sel[1]=sel[1], out=out[6]);
+Mux4Way(a=a[7], b=b[7], c=c[7], d=d[7], sel[0]=sel[0], sel[1]=sel[1], out=out[7]);
+Mux4Way(a=a[8], b=b[8], c=c[8], d=d[8], sel[0]=sel[0], sel[1]=sel[1], out=out[8]);
+Mux4Way(a=a[9], b=b[9], c=c[9], d=d[9], sel[0]=sel[0], sel[1]=sel[1], out=out[9]);
+Mux4Way(a=a[10], b=b[10], c=c[10], d=d[10], sel[0]=sel[0], sel[1]=sel[1], out=out[10]);
+Mux4Way(a=a[11], b=b[11], c=c[11], d=d[11], sel[0]=sel[0], sel[1]=sel[1], out=out[11]);
+Mux4Way(a=a[12], b=b[12], c=c[12], d=d[12], sel[0]=sel[0], sel[1]=sel[1], out=out[12]);
+Mux4Way(a=a[13], b=b[13], c=c[13], d=d[13], sel[0]=sel[0], sel[1]=sel[1], out=out[13]);
+Mux4Way(a=a[14], b=b[14], c=c[14], d=d[14], sel[0]=sel[0], sel[1]=sel[1], out=out[14]);
+Mux4Way(a=a[15], b=b[15], c=c[15], d=d[15], sel[0]=sel[0], sel[1]=sel[1], out=out[15]);
+}
