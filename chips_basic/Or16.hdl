@@ -1,0 +1,30 @@
+/** 16-bit Or **/
+//The 16 bit Or chip takes 16 pairs of inputs and checks each pair
+//to see if each pair contains at least 1
+
+CHIP Or16 {
+
+IN a[16], b[16];
+OUT out[16];
+
+PARTS:
+
+//We put each input pair through an Or gate and map the results to
+//the corresponding output gates.
+Or(a=[0], b=[0], out=[0]);
+Or(a=[1], b=[1], out=[1]);
+Or(a=[2], b=[2], out=[2]);
+Or(a=[3], b=[3], out=[3]);
+Or(a=[4], b=[4], out=[4]);
+Or(a=[5], b=[5], out=[5]);
+Or(a=[6], b=[6], out=[6]);
+Or(a=[7], b=[7], out=[7]);
+Or(a=[8], b=[8], out=[8]);
+Or(a=[9], b=[9], out=[9]);
+Or(a=[10], b=[10], out=[10]);
+Or(a=[11], b=[11], out=[11]);
+Or(a=[12], b=[12], out=[12]);
+Or(a=[13], b=[13], out=[13]);
+Or(a=[14], b=[14], out=[14]);
+Or(a=[15], b=[15], out=[15]);
+}
