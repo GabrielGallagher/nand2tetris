@@ -1,0 +1,25 @@
+/** Multiplexor (selector) **/
+//The mux chip has a selector input pin which decides wich of
+//the other two input pins will be passed on to the output.
+// If sel==1 then out=b else out=a.
+
+CHIP Mux {
+
+IN a, b, sel;
+OUT out;
+
+PARTS:
+
+//First we flip the selector bit for future use.
+Not(in=sel, out=notsel);
+//Second, we check if both a and not the selector are true.
+//So if a=1 and sel=o, then the output of this And will be 1.
+And(a=a, b=notsel, out=checka);
+//Next we check if both b and the selector are true. 
+//If they are both 1s, then the output will also be1.
+And(a=b, b=sel, out=checkb);
+//Since both the input 1X1 and X11 would result in an output
+//of one, we us an Or gate to check if either of these 
+//conditions are true.
+Or(a=checka, b=checkb, out=out);
+}
