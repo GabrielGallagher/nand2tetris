@@ -1,0 +1,35 @@
+/** 4 way Multiplexor (selector) **/
+//The 4 way multiplexor selects one of 4 inputs as the output based on a 2-bit selector.
+//If (sel==00) then (out=a). If (sel==01) then (out=b), etc.
+
+CHIP Mux4Way {
+
+IN a, b, c, d, sel[2];
+OUT out;
+
+PARTS:
+
+//First we flip both selector bits for future use.
+Not(in=sel[0], out=notsel0);
+Not(in=sel[1], out=notsel1);
+
+//Second, we check if a, not selector 1 and not selector 2 are all true.
+//That way, if the selector is 00 and a is true, the output of this gate will be true.
+And3Way(a=a, b=notsel1, c=notsel0, out=ifatrue);
+
+//Third, we check if b, not selector 1 and selector 2 are all true.
+//That way, if the selector is 01 and b is true, the output of this gate will be true.
+And3Way(a=b, b=notsel1, c=sel[0], out=ifbtrue);
+
+//Fourth, we check if c, selector 1 and not selector 2 are all true.
+//That way, if the selector is 10 and c is true, the output of this gate will be true.
+And3Way(a=c, b=sel[1], c=notsel0, out=ifctrue);
+
+//Fifth, we check if d, selector 1 and selector 2 are all true.
+//That way, if the selector is 11 and d is true, the output of this gate will be true.
+And3Way(a=d, b=sel[1], c=sel[0], out=ifdtrue);
+
+//Lastly, we check if any of the previous operations were returned true, and if any 
+//of them did, the output returns true.
+Or4Way(in[0]=ifatrue, in[1]=ifbtrue, in[2]=ifctrue, in[3]=ifdtrue, out=out);
+}
