@@ -1,0 +1,22 @@
+/** Exclusive Or **/
+//The Exlusive Or chip returns true when either input is 1, 
+//but not when both are 1s.
+//out = !(a == b).
+
+CHIP Xor {
+
+IN a, b;
+OUT out;
+
+PARTS:
+
+//First we check if it's true that A or B are a 1
+Or(a=a, b=b, out=aorb);
+//Second we check wether A and B are 1s
+And(a=a, b=b, out=ab);
+//Next we flip ab, so that it becomes false if a & b are 1s
+Not(in=ab, out=notab);
+//Lastly we check if it's true that A or B is one, and  that
+//both of of them aren't 1s. 
+And(a=aorb, b=notab, out=out);
+}
