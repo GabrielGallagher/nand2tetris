@@ -1,0 +1,21 @@
+/** Demultiplexor (combiner) **/
+//The Dmux chip takes an input and sends it to one of two
+//output pins, based on the value of the selector bit.
+// {a,b} = {in,0} if sel==0
+//         {0,in} if sel==1
+CHIP Dmux {
+
+IN in, sel;
+OUT a, b;
+
+PARTS:
+
+//First we flip the selector bit for future use.
+Not(in=sel, out=notsel);
+//Second, we check if the input and selector are both true.
+//If they are, then output pin b becomes true.
+And(a=in, b=sel, out=b);
+//Lastly we check if both a and not the selector are true.
+//If they are both true, then output pin a becomes true.
+And(a=in, b=notsel, out=a);
+}
