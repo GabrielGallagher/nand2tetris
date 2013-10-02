@@ -1,0 +1,19 @@
+//This gate outputs the reverse of whatever the input is.
+//Not gate: out = not in
+
+
+CHIP Not {
+
+IN in;
+OUT out;
+
+PARTS:
+//The first input pin is always true (1).
+//The second pin is the global in pin.
+//The global out is always the opposite of the global in, 
+//because if the global in is 1, then the nand gate will 
+//output 0 since both inputs are 1s. 
+//If the global in is 0, then the nand gate will output 1 
+//since both input pins are not 1s.
+Nand(a=true, b=in, out=out);
+}
