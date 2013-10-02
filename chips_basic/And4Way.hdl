@@ -1,0 +1,18 @@
+/** 4-Way And **/
+//The 4 Way And chip returns true if all 4 inputs are true
+//If (a==b==c==d) then (out=1), else (out=0). 
+
+CHIP And4Way{
+
+IN a, b, c, d;
+OUT out;
+
+PARTS:
+
+//First we check that both a and b are true
+And(a=a, b=b, out=andab);
+//Then we check whether a and b and c are true
+And(a=c, b=andab, out=aandbandc);
+//Lastly we check if a and b and c and d are true, and if they are we return true.
+And(a=d, b=aandbandc, out=out);
+}
