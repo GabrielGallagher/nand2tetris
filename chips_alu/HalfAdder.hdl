@@ -1,0 +1,18 @@
+//** Half Adder **//
+//Computes the sum of two bits.
+
+
+CHIP HalfAdder {
+    IN a, b;    // 1-bit inputs
+    OUT sum,    // Right bit of a + b 
+        carry;  // Left bit of a + b
+
+    PARTS:
+ 
+	//If and and b are both 1, then we know that there will be a carry.
+	And(a=a, b=b, out=carry);
+	
+	//The only case in which the sum is true, is when one of a and b are 1,
+	//but not both. Because if both are true, then there would be a carry.
+	Xor(a=a, b=b, out=sum);
+}
