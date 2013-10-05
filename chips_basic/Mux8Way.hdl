@@ -1,0 +1,53 @@
+/** 8-Way Multiplexor (selector) **/
+//The 8-way multiplexor selects one of 8 inputs and pipes it to the output.
+//If (a==1 and sel==000) then (out=1), if (b==1 and sel==001) then (out=1), etc.
+//Else (out==0). 
+
+CHIP Mux8Way{
+
+IN a, b, c, d, e, f, g, h, sel[3];
+OUT out;
+
+PARTS:
+
+//First we flip each of the selector bits for future use.
+Not(in=sel[0], out=notsel0);
+Not(in=sel[1], out=notsel1);
+Not(in=sel[2], out=notsel2);
+
+//Second, we check whether a, not sel 0, not sel 1 and not sel 2 are true.
+//That way, if a is 1 and sel is 000, the output of this chip will also be 1.
+And4Way(a=a, b=notsel0, c=notsel1, d=notsel2, out=checka);
+
+//Third, we check whether b, sel 0, not sel 1 and not sel 2 are true.
+//That way, if b is 1 and sel is 001, the output of this chip will also be 1.
+And4Way(a=b, b=sel[0], c=notsel1, d=notsel2, out=checkb);
+
+//Fourth, we check whether c, not sel 0, sel 1 and not sel 2 are true.
+//That way, if c is 1 and sel is 010, the output of this chip will also be 1.
+And4Way(a=c, b=notsel0, c=sel[1], d=notsel2, out=checkc);
+
+//Fifth, we check whether d, sel 0, sel 1 and not sel 2 are true.
+//That way, if d is 1 and sel is 011, the output of this chip will also be 1.
+And4Way(a=d, b=sel[0], c=sel[1], d=notsel2, out=checkd);
+
+//Sixth, we check whether e, not sel 0, not sel 1 and sel 2 are true.
+//That way, if e is 1 and sel is 100, the output of this chip will also be 1.
+And4Way(a=e, b=notsel0, c=notsel1, d=sel[2], out=checke);
+
+//Seventh, we check whether f, sel 0, not sel 1 and sel 2 are true.
+//That way, if f is 1 and sel is 101, the output of this chip will also be 1.
+And4Way(a=f, b=sel[0], c=notsel1, d=sel[2], out=checkf);
+
+//Eighth, we check whether g, not sel 0, sel 1 and sel 2 are true.
+//That way, if g is 1 and sel is 110, the output of this chip will also be 1.
+And4Way(a=g, b=notsel0, c=sel[1], d=sel[2], out=checkg);
+
+//ninth, we check whether h, sel 0, sel 1 and sel 2 are true.
+//That way, if h is 1 and sel is 111, the output of this chip will also be 1.
+And4Way(a=h, b=sel[0], c=sel[1], d=sel[2], out=checkh);
+
+//Lastly, we use an 8 bit or to check if any of the previous chips were true.
+//If any of them were, then the global output of the chip will also be true.
+Or8Way(in[0]=checka, in[1]=checkb, in[2]=checkc, in[3]=checkd, in[4]=checke, in[5]=checkf, in[6]=checkg, in[7]=checkh, out=out);
+}
