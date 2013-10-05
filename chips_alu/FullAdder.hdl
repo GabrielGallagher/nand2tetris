@@ -1,0 +1,33 @@
+/** Full Adder **/
+//Computes the sum of three bits.
+ 
+
+CHIP FullAdder {
+    IN a, b, c;  // 1-bit inputs
+    OUT sum,     // Right bit of a + b + c
+        carry;   // Left bit of a + b + c
+
+    PARTS:
+    
+	//The sum is true when either one input is true, or all 3 inputs are true.
+	//To check this, first we see wether only one of the 3 inputs are true.
+	Xor(a=a, b=b, out=axorb);
+	Xor(a=axorb, b=c, out=axorbxorc);
+	
+	//Then we check whether all 3 inputs are true.
+	And3Way(a=a, b=b, c=c, out=aandbandc);
+	
+	//To determine whether the sum is true, we check whether one of the previously
+	//mentioned conditions are true.
+	Or(a=axorbxorc, b=aandbandc, out=sum); 
+	
+	//Carry is true when any two input bits are true, or when all inputs are true.
+	//To check this, we only need tocheck whether only 2 of the inputs are true.
+	//This is because, if 3 inputs are true, then at least 2 inputs will be true.
+	And(a=a, b=b, out=aandb);
+	And(a=b, b=c, out=bandc);
+	And(a=a, b=c, out=aandc);
+	Or(a=aandb, b=bandc, out=aandborbandc);
+	Or(a=aandborbandc, b=aandc, out=carry);
+
+}
