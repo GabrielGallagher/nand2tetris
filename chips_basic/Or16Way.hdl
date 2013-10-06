@@ -1,0 +1,22 @@
+/** 16 Way Or **/
+//The 16 way Or gate checks 16 inputs to see if any or many of them are true.
+//If any or many of the inputs are true, then the output is also true. 
+//out = in[0] or in[1] or ... or in[15].
+
+CHIP Or8way{
+
+IN in[16];
+OUT out;
+
+PARTS:
+
+//First, we divide the inputs into 2 8 way or chips
+Or8Way(in[0]=in[0], in[1]=in[1], in[2]=in[2], in[3]=in[3], in[4]=in[4], 
+in[5]=in[5], in[6]=in[6], in[7]=in[7], out=firsthalf);
+
+Or8Way(in[0]=in[8], in[1]=in[9], in[2]=in[10], in[3]=in[11], in[4]=in[12], 
+in[5]=in[13], in[6]=in[14], in[7]=in[15], out=secondhalf); 
+
+//Then we take the resulting 2 outputs and put them through a simple or chip
+Or(a=firsthalf, b=secondhalf, out=out);
+}
