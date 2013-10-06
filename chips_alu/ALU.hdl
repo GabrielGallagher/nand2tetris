@@ -162,7 +162,7 @@ CHIP ALU {
    //Then we preform a bitwise or on x plus y and f and, x and y and not f.
    Or16(a[0]=xplusyandf0, a[1]=xplusyandf1, a[2]=xplusyandf2, a[3]=xplusyandf3, a[4]=xplusyandf4, a[5]=xplusyandf5, 
    a[6]=xplusyandf6, a[7]=xplusyandf7, a[8]=xplusyandf8, a[9]=xplusyandf9, a[10]=xplusyandf10, a[11]=xplusyandf11, 
-   a[12]=xplusyandf12, a[13]=xplusyandf13, a[14]=xplusyandf14, a[15]=xplusyandf15, 
+   a[12]=xplusyandf12, a[13]=xplusyandf13, a[14]=xplusyandf14, a[15]=xplusyandf15, b[0]=xandyandnotf0
    b[1]=xandyandnotf1, b[2]=xandyandnotf2, b[3]=xandyandnotf3, b[4]=xandyandnotf4, b[5]=xandyandnotf5,  
    b[6]=xandyandnotf6, b[7]=xandyandnotf7, b[8]=xandyandnotf8, b[9]=xandyandnotf9, b[10]=xandyandnotf10, 
    b[11]=xandyandnotf11, b[12]=xandyandnotf12, b[13]=xandyandnotf13, b[14]=xandyandnotf14, b[15]=xandyandnotf15,  
