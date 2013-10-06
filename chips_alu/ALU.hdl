@@ -200,7 +200,7 @@ CHIP ALU {
    //Finally, we check if the output is negative. If it is, then ng is true.
    //To do this, we will simply check if the most significant bit is true.
    //Since in our 2s complement system, this would indicate a negative.
-   And(a=postout0, b=true, out=ng);
+   And(a=postout15, b=true, out=ng);
    
    //RESULT RETURN//
    
