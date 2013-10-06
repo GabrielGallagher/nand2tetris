@@ -165,7 +165,7 @@ CHIP ALU {
    a[12]=xplusyandf12, a[13]=xplusyandf13, a[14]=xplusyandf14, a[15]=xplusyandf15, 
    b[1]=xandyandnotf1, b[2]=xandyandnotf2, b[3]=xandyandnotf3, b[4]=xandyandnotf4, b[5]=xandyandnotf5,  
    b[6]=xandyandnotf6, b[7]=xandyandnotf7, b[8]=xandyandnotf8, b[9]=xandyandnotf9, b[10]=xandyandnotf10, 
-   b[11]=xandyandnotf11, b[12]=xandyandnotf12, b[13]=xandyandnotf13, b[14]=xandyandnotf14, b[15]=xandyandnotf15),  
+   b[11]=xandyandnotf11, b[12]=xandyandnotf12, b[13]=xandyandnotf13, b[14]=xandyandnotf14, b[15]=xandyandnotf15,  
    out[0]=mainout0, out[1]=mainout1, out[2]=mainout2, out[3]=mainout3, out[4]=mainout4, out[5]=mainout5, out[6]=mainout6, 
    out[7]=mainout7, out[8]=mainout8, out[9]=mainout9, out[10]=mainout10, out[11]=mainout11, out[12]=mainout12, 
    out[13]=mainout13, out[14]=mainout14, out[15]=mainout15);
