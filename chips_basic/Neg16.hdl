@@ -1,0 +1,15 @@
+/** 16bit negater **/
+//Takes a 16 bit number and negates it according to the 2s complement method.
+
+   chip Neg16 {
+   
+   IN in[16];
+   OUT out[16];
+   
+   PARTS:
+   
+   //First we flip each of the inputs
+   Not16(in[0]=in[0], in[1]=in[1], in[2]=in[2], in[3]=in[3], in[4]=in[4], in[5]=in[5], in[6]=in[6], in[7]=in[7], in[8]=in[8], in[9]=in[9], in[10]=in[10], in[11]=in[11], in[12]=in[12], in[13]=in[13], in[14]=in[14], in[15]=in[15], out[0]=neg0, out[1]=neg1, out[2]=neg2, out[3]=neg3, out[4]=neg4, out[5]=neg5, out[6]=neg6, out[7]=neg7, out[8]=neg8, out[9]=neg9, out[10]=neg10, out[11]=neg11, out[12]=neg12, out[13]=neg13, out[14]=neg14, out[15]=neg15);
+   
+   //Then we increment it by one
+   Inc16(in[0]=neg0, in[1]=neg1, in[2]=neg2, in[3]=neg3, in[4]=neg4, in[5]=neg5, in[6]=neg6, in[7]=neg7, in[8]=neg8, in[9]=neg9, in[10]=neg10, in[11]=neg111, in[12]=neg12, in[13]=neg13, in[14]=neg14, in[15]=neg15, out[0]=out[0], out[1]=out[1], out[2]=out[2], out[3]=out[3], out[4]=out[4], out[5]=out[5], out[6]=out[6], out[7]=out[7], out[8]=out[8], out[9]=out[9], out[10]=out[10], out[11]=out[11], out[12]=out[12], out[13]=out[13], out[14]=out[14], out[15]=out[15]);
