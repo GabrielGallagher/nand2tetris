@@ -2,17 +2,23 @@
 //The 8 way Or gate checks 8 inputs to see if any or many of them are true.
 //If any or many of the inputs are true, then the output is also true. 
 //out = in[0] or in[1] or ... or in[7].
+
 CHIP Or8way{
 
 IN in[8];
 OUT out;
 
 PARTS:
+
+//First, we divide the input into pairs and put each pair through an or chip.
 Or(a=in[0], b=in[1], out=check01);
 Or(a=in[2], b=in[3], out=check23);
 Or(a=in[4], b=in[5], out=check45);
 Or(a=in[6], b=in[7], out=check67);
+//Then we take the resulting 4 outputs and divide it into 2 pairs.
+//We then put each pair through an or chip.
 Or(a=check01, b=check23, out=check0123);
 Or(a=check45, b=check67, out=check4567);
+//Finally, we take the 2 resulting outputs and put the pair through and or chip.
 Or(a=check0123, b=check4567, out=out);
 }
