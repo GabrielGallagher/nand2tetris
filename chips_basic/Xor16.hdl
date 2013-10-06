@@ -1,0 +1,30 @@
+/** 16-bit Exlusive Or **/
+//The 16 bit Xor chip takes 16 pairs of inputs and checks each pair
+//to see if each pair contains contains only 1 true bit.
+
+CHIP Xor16 {
+
+IN a[16], b[16];
+OUT out[16];
+
+PARTS:
+
+//We put each input pair through an Xor gate and map the results to
+//the corresponding output gates.
+XXor(a=[0], b=[0], out=[0]);
+Xor(a=[1], b=[1], out=[1]);
+Xor(a=[2], b=[2], out=[2]);
+Xor(a=[3], b=[3], out=[3]);
+Xor(a=[4], b=[4], out=[4]);
+Xor(a=[5], b=[5], out=[5]);
+Xor(a=[6], b=[6], out=[6]);
+Xor(a=[7], b=[7], out=[7]);
+Xor(a=[8], b=[8], out=[8]);
+Xor(a=[9], b=[9], out=[9]);
+Xor(a=[10], b=[10], out=[10]);
+Xor(a=[11], b=[11], out=[11]);
+Xor(a=[12], b=[12], out=[12]);
+Xor(a=[13], b=[13], out=[13]);
+Xor(a=[14], b=[14], out=[14]);
+Xor(a=[15], b=[15], out=[15]);
+}
