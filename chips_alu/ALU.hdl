@@ -193,7 +193,7 @@ CHIP ALU {
    Or16Way(in[0]=postout0, in[1]=postout1, in[2]=postout2, in[3]=postout3, in[4]=postout4, 
    in[5]=postout5, in[6]=postout6, in[7]=postout7, in[8]=postout8, in[9]=postout9, 
    in[10]=postout10, in[11]=postout11, in[12]=postout12, in[13]=postout13, in[14]=postout14, 
-   in[15]=postout15, out=notzr)
+   in[15]=postout15, out=notzr);
    
    Not(in=notzr, out=zr);
    
