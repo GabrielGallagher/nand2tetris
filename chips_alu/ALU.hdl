@@ -87,10 +87,10 @@ CHIP ALU {
    a[11]=y[11], a[12]=y[12], a[13]=y[13], a[14]=y[14], a[15]=y[15],
    b[0]=notzy, b[1]=notzy, b[2]=notzy, b[3]=notzy, b[4]=notzy, b[5]=notzy, b[6]=notzy, 
    b[7]=notzy, b[8]=notzy, b[9]=notzy, b[10]=notzy, b[11]=notzy, b[12]=notzy, b[13]=notzy, 
-   b[14]=notzy, b[15]=notzy, out=yandnotzy0, out=yandnotzy1, out=yandnotzy2, out=yandnotzy3,
-   out=yandnotzy4, out=yandnotzy5, out=yandnotzy6, out=yandnotzy7, out=yandnotzy8, 
-   out=yandnotzy9, out=yandnotzy10, out=yandnotzy11, out=yandnotzy12, out=yandnotzy13, 
-   out=yandnotzy14, out=yandnotzy15);      
+   b[14]=notzy, b[15]=notzy, out[0]=yandnotzy0, out[1]=yandnotzy1, out[2]=yandnotzy2, out[3]=yandnotzy3,
+   out[4]=yandnotzy4, out[5]=yandnotzy5, out[6]=yandnotzy6, out[7]=yandnotzy7, out[8]=yandnotzy8, 
+   out[9]=yandnotzy9, out[10]=yandnotzy10, out[11]=yandnotzy11, out[12]=yandnotzy12, out[13]=yandnotzy13, 
+   out[14]=yandnotzy14, out[15]=yandnotzy15);      
    
    //If ny is true and the input is false, then the output is true.
    //If ny is false but the input is true, then the output is true.
