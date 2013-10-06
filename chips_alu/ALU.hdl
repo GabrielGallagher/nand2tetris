@@ -1,0 +1,217 @@
+/** Algorithmic Logic Unit **/
+//The ALU. Computes one of the following functions:
+//x+y, x-y, y-x, 0, 1, -1, x, y, -x, -y, !x, !y,
+//x+1, y+1, x-1, y-1, x&y, x|y on two 16-bit inputs, 
+//according to 6 input bits denoted zx,nx,zy,ny,f,no.
+//The bit-combinations that yield each function are 
+//documented in the book. In addition, the ALU 
+//computes two 1-bit outputs: if the ALU output
+//is 0, zr is set to 1; otherwise zr is set to 0;
+/If out<0, ng is set to 1; otherwise ng is set to 0.
+
+
+// Implementation: the ALU manipulates the x and y
+// inputs and then operates on the resulting values, 
+// as follows:
+// if (zx==1) set x = 0        // 16-bit constant
+// if (nx==1) set x = ~x       // bitwise "not"
+// if (zy==1) set y = 0        // 16-bit constant
+// if (ny==1) set y = ~y       // bitwise "not"
+// if (f==1)  set out = x + y  // integer 2's complement addition
+// if (f==0)  set out = x & y  // bitwise "and"
+// if (no==1) set out = ~out   // bitwise "not"
+// if (out==0) set zr = 1
+// if (out<0) set ng = 1
+
+  
+CHIP ALU {
+    IN  
+        x[16], y[16],  // 16-bit inputs        
+        zx, // zero the x input? 
+        nx, // negate the x input?
+        zy, // zero the y input?
+        ny, // negate the y input?
+        f,  // compute  out = x + y (if 1) or out = x & y (if 0)
+        no; // negate the out output?
+
+    OUT 
+        out[16], // 16-bit output
+        zr, // 1 if (out==0), 0 otherwise
+        ng; // 1 if (out<0),  0 otherwise
+
+    PARTS:
+   
+   //X PRECALCULATIONS//
+   
+   //First, we take x and set each 1 to a 0 if zx is true.
+   //To do this, we first flip zx for future use.
+   Not(in=zx, out=notzx);
+   
+   //Then, we check if not zx and x are true. If they are both
+   //true, then the output is true.
+   And16(a[0]=x[0], a[1]=x[1], a[2]=x[2], a[3]=x[3], a[4]=x[4], 
+   a[5]=x[5], a[6]=x[6], a[7]=x[7], a[8]=x[8], a[9]=x[9], a[10]=x[10], 
+   a[11]=x[11], a[12]=x[12], a[13]=x[13], a[14]=x[14], a[15]=x[15],
+   b[0]=notzx, b[1]=notzx, b[2]=notzx, b[3]=notzx, b[4]=notzx, b[5]=notzx, b[6]=notzx, 
+   b[7]=notzx, b[8]=notzx, b[9]=notzx, b[10]=notzx, b[11]=notzx, b[12]=notzx, b[13]=notzx, 
+   b[14]=notzx, b[15]=notzx, out=xandnotzx0, out=xandnotzx1, out=xandnotzx2, out=xandnotzx3,
+   out=xandnotzx4, out=xandnotzx5, out=xandnotzx6, out=xandnotzx7, out=xandnotzx8, 
+   out=xandnotzx9, out=xandnotzx10, out=xandnotzx11, out=xandnotzx12, out=xandnotzx13, 
+   out=xandnotzx14, out=xandnotzx15);    
+   
+   //If nz is true and the input is false, then the output is true.
+   //If nz is false but the input is true, then the output is true.
+   //We can achieve this by using a 16bit Xor chip. 
+   Xor16(a[0]=xandnotzx0, a[1]=xandnotzx1, a[2]=xandnotzx2, a[3]=xandnotzx3, 
+   a[4]=xandnotzx4, a[5]=xandnotzx5, a[6]=xandnotzx6, a[7]=xandnotzx7, a[8]=xandnotzx8, 
+   a[9]=xandnotzx9, a[10]=xandnotzx10, a[11]=xandnotzx11, a[12]=xandnotzx12, a[13]=xandnotzx13, 
+   a[14]=xandnotzx14, a[15]=xandnotzx15, b[0]=nx, b[1]=nx, b[2]=nx, b[3]=nx, b[4]=nx, 
+   b[5]=nx, b[6]=nx, b[7]=nx, b[8]=nx, b[9]=nx, b[10]=nx, b[11]=nx, b[12]=nx, 
+   b[13]=nx, b[14]=nx, b[15]=nx, out[0]=xandnotzxxornx0, out[1]=xandnotzxxornx1,
+   out[2]=xandnotzxxornx2, out[3]=xandnotzxxornx3, out[4]=xandnotzxxornx4, 
+   out[5]=xandnotzxxornx5, out[6]=xandnotzxxornx6, out[7]=xandnotzxxornx7, 
+   out[8]=xandnotzxxornx8, out[9]=xandnotzxxornx9, out[10]=xandnotzxxornx10,
+   out[11]=xandnotzxxornx11, out[12]=xandnotzxxornx12, out[13]=xandnotzxxornx13,
+   out[14]=xandnotzxxornx14, out[15]=xandnotzxxornx15);   
+   
+   //Y PRECALCULATIONS//
+   
+   //First, we take y and set each 1 to a 0 if zy is true.
+   //To do this, we first flip zy for future use.
+   Not(in=zy, out=notzy);
+   
+   //Then, we check if not zy and y are true. If they are both
+   //true, then the output is true.
+   And16(a[0]=y[0], a[1]=y[1], a[2]=y[2], a[3]=y[3], a[4]=y[4], 
+   a[5]=y[5], a[6]=y[6], a[7]=y[7], a[8]=y[8], a[9]=y[9], a[10]=y[10], 
+   a[11]=y[11], a[12]=y[12], a[13]=y[13], a[14]=y[14], a[15]=y[15],
+   b[0]=notzy, b[1]=notzy, b[2]=notzy, b[3]=notzy, b[4]=notzy, b[5]=notzy, b[6]=notzy, 
+   b[7]=notzy, b[8]=notzy, b[9]=notzy, b[10]=notzy, b[11]=notzy, b[12]=notzy, b[13]=notzy, 
+   b[14]=notzy, b[15]=notzy, out=yandnotzy0, out=yandnotzy1, out=yandnotzy2, out=yandnotzy3,
+   out=yandnotzy4, out=yandnotzy5, out=yandnotzy6, out=yandnotzy7, out=yandnotzy8, 
+   out=yandnotzy9, out=yandnotzy10, out=yandnotzy11, out=yandnotzy12, out=yandnotzy13, 
+   out=yandnotzy14, out=yandnotzy15);      
+   
+   //If ny is true and the input is false, then the output is true.
+   //If ny is false but the input is true, then the output is true.
+   //We can achieve this by using a 16bit Xor chip. 
+   Xor16(a[0]=yandnotzy0, a[1]=yandnotzy1, a[2]=yandnotzy2, a[3]=yandnotzy3, 
+   a[4]=yandnotzy4, a[5]=yandnotzy5, a[6]=yandnotzy6, a[7]=yandnotzy7, a[8]=yandnotzy8, 
+   a[9]=yandnotzy9, a[10]=yandnotzy10, a[11]=yandnotzy11, a[12]=yandnotzy12, a[13]=yandnotzy13, 
+   a[14]=yandnotzy14, a[15]=yandnotzy15, b[0]=ny, b[1]=ny, b[2]=ny, b[3]=ny, b[4]=ny, 
+   b[5]=ny, b[6]=ny, b[7]=ny, b[8]=ny, b[9]=ny, b[10]=ny, b[11]=ny, b[12]=ny, 
+   b[13]=ny, b[14]=ny, b[15]=ny, out[0]=yandnotzxxorny0, out[1]=yandnotzxxorny1,
+   out[2]=yandnotzxxorny2, out[3]=yandnotzxxorny3, out[4]=yandnotzxxorny4, 
+   out[5]=yandnotzxxorny5, out[6]=yandnotzxxorny6, out[7]=yandnotzxxorny7, 
+   out[8]=yandnotzxxorny8, out[9]=yandnotzxxorny9, out[10]=yandnotzxxorny10,
+   out[11]=yandnotzxxorny11, out[12]=yandnotzxxorny12, out[13]=yandnotzxxorny13,
+   out[14]=yandnotzxxorny14, out[15]=yandnotzxxorny15);   
+   
+   //MAIN OPERATIONS//
+   
+   //Next we add x and y together
+   Add16(a[0]=xandnotzxxornx0, a[1]=xandnotzxxornx1, a[2]=xandnotzxxornx2, a[3]=xandnotzxxornx3, 
+   a[4]=xandnotzxxornx4, a[5]=xandnotzxxornx5, a[6]=xandnotzxxornx6, a[7]=xandnotzxxornx7, 
+   a[8]=xandnotzxxornx8, a[9]=xandnotzxxornx9, a[10]=xandnotzxxornx10, a[11]=xandnotzxxornx11, 
+   a[12]=xandnotzxxornx12, a[13]=xandnotzxxornx13, a[14]=xandnotzxxornx14, a[15]=xandnotzxxornx15, 
+   b[0]=yandnotzxxorny0, b[1]=yandnotzxxorny1, b[2]=yandnotzxxorny2, b[3]=yandnotzxxorny3, 
+   b[4]=yandnotzxxorny4, b[5]=yandnotzxxorny5, b[6]=yandnotzxxorny6, b[7]=yandnotzxxorny7, 
+   b[8]=yandnotzxxorny8, b[9]=yandnotzxxorny9, b[10]=yandnotzxxorny10, b[11]=yandnotzxxorny11, 
+   b[12]=yandnotzxxorny12, b[13]=yandnotzxxorny13, b[14]=yandnotzxxorny14, b[15]=yandnotzxxorny15, 
+   out[0]=xplusy0, out[1]=xplusy1, out[2]=xplusy2, out[3]=xplusy3, out[4]=xplusy4, out[5]=xplusy5, 
+   out[6]=xplusy6, out[7]=xplusy7, out[8]=xplusy8, out[9]=xplusy9, out[10]=xplusy10, out[11]=xplusy11, 
+   out[12]=xplusy12, out[13]=xplusy13, out[14]=xplusy14, out[15]=xplusy15);   
+   
+   //Then we preform a bitwise and on x and y
+   And16(a[0]=xandnotzxxornx0, a[1]=xandnotzxxornx1, a[2]=xandnotzxxornx2, a[3]=xandnotzxxornx3, 
+   a[4]=xandnotzxxornx4, a[5]=xandnotzxxornx5, a[6]=xandnotzxxornx6, a[7]=xandnotzxxornx7, 
+   a[8]=xandnotzxxornx8, a[9]=xandnotzxxornx9, a[10]=xandnotzxxornx10, a[11]=xandnotzxxornx11, 
+   a[12]=xandnotzxxornx12, a[13]=xandnotzxxornx13, a[14]=xandnotzxxornx14, a[15]=xandnotzxxornx15, 
+   b[0]=yandnotzxxorny0, b[1]=yandnotzxxorny1, b[2]=yandnotzxxorny2, b[3]=yandnotzxxorny3, 
+   b[4]=yandnotzxxorny4, b[5]=yandnotzxxorny5, b[6]=yandnotzxxorny6, b[7]=yandnotzxxorny7, 
+   b[8]=yandnotzxxorny8, b[9]=yandnotzxxorny9, b[10]=yandnotzxxorny10, b[11]=yandnotzxxorny11, 
+   b[12]=yandnotzxxorny12, b[13]=yandnotzxxorny13, b[14]=yandnotzxxorny14, b[15]=yandnotzxxorny15, 
+   out[0]=xandy0, out[1]=xandy1, out[2]=xandy2, out[3]=xandy3, out[4]=xandy4, out[5]=xandy5, 
+   out[6]=xandy6, out[7]=xandy7, out[8]=xandy8, out[9]=xandy9, out[10]=xandy10, out[11]=xandy11, 
+   out[12]=xandy12, out[13]=xandy13, out[14]=xandy14, out[15]=xandy15);
+   
+   //Next we check if either xplusy and f are true, or if xandy and not f are true.//
+   //If either is true, then the output is true. //
+   
+   //First we negate f for future use.
+   Not(in=f, out=notf);
+   
+   //Then we preform a bitwise and on x plus y and f.
+   And16(a[0]=xplusy0, a[1]=xplusy1, a[2]=xplusy2, a[3]=xplusy3, a[4]=xplusy4, a[5]=xplusy5, 
+   a[6]=xplusy6, a[7]=xplusy7, a[8]=xplusy8, a[9]=xplusy9, a[10]=xplusy10, a[11]=xplusy11, 
+   a[12]=xplusy12, a[13]=xplusy13, a[14]=xplusy14, a[15]=xplusy15, b[0]=f, b[1]=f, b[2]=f, 
+   b[3]=f, b[4]=f, b[5]=f, b[6]=f, b[7]=f, b[8]=f, b[9]=f, b[10]=f, b[11]=f, b[12]=f, b[13]=f, 
+   b[14]=f, b[15]=f, out[0]=xplusyandf0, out[1]=xplusyandf1, out[2]=xplusyandf2, out[3]=xplusyandf3, out[4]=xplusyandf4, out[5]=xplusyandf5, 
+   out[6]=xplusyandf6, out[7]=xplusyandf7, out[8]=xplusyandf8, out[9]=xplusyandf9, out[10]=xplusyandf10, out[11]=xplusyandf11, 
+   out[12]=xplusyandf12, out[13]=xplusyandf13, out[14]=xplusyandf14, out[15]=xplusyandf15);
+   
+   //Then we preform a bitwise and on x and y and not f. 
+   And16(a[0]=xandy0, a[1]=xandy1, a[2]=xandy2, a[3]=xandy3, a[4]=xandy4, a[5]=xandy5, 
+   a[6]=xandy6, a[7]=xandy7, a[8]=xandy8, a[9]=xandy9, a[10]=xandy10, a[11]=xandy11, 
+   a[12]=xandy12, a[13]=xandy13, a[14]=xandy14, a[15]=xandy15, b[0]=notf, b[1]=notf, b[2]=notf, 
+   b[3]=notf, b[4]=notf, b[5]=notf, b[6]=notf, b[7]=notf, b[8]=notf, b[9]=notf, b[10]=notf, b[11]=notf, b[12]=notf, b[13]=notf, 
+   b[14]=notf, b[15]=notf, out[0]=xandyandnotf0, out[1]=xandyandnotf1, out[2]=xandyandnotf2, out[3]=xandyandnotf3, out[4]=xandyandnotf4, out[5]=xandyandnotf5, 
+   out[6]=xandyandnotf6, out[7]=xandyandnotf7, out[8]=xandyandnotf8, out[9]=xandyandnotf9, out[10]=xandyandnotf10, out[11]=xandyandnotf11, 
+   out[12]=xandyandnotf12, out[13]=xandyandnotf13, out[14]=xandyandnotf14, out[15]=xandyandnotf15);
+   
+   //Then we preform a bitwise or on x plus y and f and, x and y and not f.
+   Or16(a[0]=xplusyandf0, a[1]=xplusyandf1, a[2]=xplusyandf2, a[3]=xplusyandf3, a[4]=xplusyandf4, a[5]=xplusyandf5, 
+   a[6]=xplusyandf6, a[7]=xplusyandf7, a[8]=xplusyandf8, a[9]=xplusyandf9, a[10]=xplusyandf10, a[11]=xplusyandf11, 
+   a[12]=xplusyandf12, a[13]=xplusyandf13, a[14]=xplusyandf14, a[15]=xplusyandf15, 
+   b[1]=xandyandnotf1, b[2]=xandyandnotf2, b[3]=xandyandnotf3, b[4]=xandyandnotf4, b[5]=xandyandnotf5,  
+   b[6]=xandyandnotf6, b[7]=xandyandnotf7, b[8]=xandyandnotf8, b[9]=xandyandnotf9, b[10]=xandyandnotf10, 
+   b[11]=xandyandnotf11, b[12]=xandyandnotf12, b[13]=xandyandnotf13, b[14]=xandyandnotf14, b[15]=xandyandnotf15),  
+   out[0]=mainout0, out[1]=mainout1, out[2]=mainout2, out[3]=mainout3, out[4]=mainout4, out[5]=mainout5, out[6]=mainout6, 
+   out[7]=mainout7, out[8]=mainout8, out[9]=mainout9, out[10]=mainout10, out[11]=mainout11, out[12]=mainout12, 
+   out[13]=mainout13, out[14]=mainout14, out[15]=mainout15);
+   
+   
+   //POST CALCULATIONS//
+   
+   //If No is true, then we need to flip all the bits
+   //To do this, we use the same technique as with the precalculations, using an Xor chip.
+   //We check whether the output or no are true, but not both. 
+   Xor16(a[0]=mainout0, a[1]=mainout1, a[2]=mainout2, a[3]=mainout3, 
+   a[4]=mainout4, a[5]=mainout5, a[6]=mainout6, a[7]=mainout7, a[8]=mainout8, 
+   a[9]=mainout9, a[10]=mainout10, a[11]=mainout11, a[12]=mainout12, a[13]=mainout13, 
+   a[14]=mainout14, a[15]=mainout15, 
+   b[0]=no, b[1]=no, b[2]=no, b[3]=no, b[4]=no, b[5]=no, b[6]=no, b[7]=no, b[8]=no, b[9]=no, 
+   b[10]=no, b[11]=no, b[12]=no, b[13]=no, b[14]=no, b[15]=no, 
+   out[0]=postout0, out[1]=postout1, out[2]=postout2, out[3]=postout3, out[4]=postout4, 
+   out[5]=postout5, out[6]=postout6, out[7]=postout7, out[8]=postout8, out[9]=postout9, 
+   out[10]=postout10, out[11]=postout11, out[12]=postout12, out[13]=postout13, out[14]=postout14, 
+   out[15]=postout15); 
+   
+   //Next, we need to check if the output is 0. If it is, then zr is true.
+   //We can do this simply by checking if any of the output is 1 by using an 16 way Or chip.
+   //Then, we negate the output of the 16 way Or chip to find the value of zr.
+   Or16Way(in[0]=postout0, in[1]=postout1, in[2]=postout2, in[3]=postout3, in[4]=postout4, 
+   in[5]=postout5, in[6]=postout6, in[7]=postout7, in[8]=postout8, in[9]=postout9, 
+   in[10]=postout10, in[11]=postout11, in[12]=postout12, in[13]=postout13, in[14]=postout14, 
+   in[15]=postout15, out=notzr)
+   
+   Not(in=notzr, out=zr);
+   
+   //Finally, we check if the output is negative. If it is, then ng is true.
+   //To do this, we will simply check if the most significant bit is true.
+   //Since in our 2s complement system, this would indicate a negative.
+   And(a=postout0, b=1, out=ng);
+   
+   //RESULT RETURN//
+   
+   //I'm assuming there's a better way to do this, but I basically just made postout = out
+   //by using an and chip
+   And16(a[0]=postout0, a[1]=postout1, a[2]=postout2, a[3]=postout3, a[4]=postout4, a[5]=postout5, 
+   a[6]=postout6, a[7]=postout7, a[8]=postout8, a[9]=postout9, a[10]=postout10, a[11]=postout11, 
+   a[12]=postout12, a[13]=postout13, a[14]=postout14, a[15]=postout15, b[0]=true, b[1]=true, b[2]=true, 
+   b[3]=true, b[4]=true, b[5]=true, b[6]=true, b[7]=true, b[8]=true, b[9]=true, b[10]=true, b[11]=true, b[12]=true, b[13]=true, 
+   b[14]=true, b[15]=true, out[0]=out[0], out[1]=out[1], out[2]=out[2], out[3]=out[3], out[4]=out[4], out[5]=out[5], 
+   out[6]=out[6], out[7]=out[7], out[8]=out[8], out[9]=out[9], out[10]=out[10], out[11]=out[11], 
+   out[12]=out[12], out[13]=out[13], out[14]=out[14], out[15]=out[15]);
+   
+}
