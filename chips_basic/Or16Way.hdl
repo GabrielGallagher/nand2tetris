@@ -3,7 +3,7 @@
 //If any or many of the inputs are true, then the output is also true. 
 //out = in[0] or in[1] or ... or in[15].
 
-CHIP Or8way{
+CHIP Or16Way{
 
 IN in[16];
 OUT out;
