@@ -54,10 +54,10 @@ CHIP ALU {
    a[11]=x[11], a[12]=x[12], a[13]=x[13], a[14]=x[14], a[15]=x[15],
    b[0]=notzx, b[1]=notzx, b[2]=notzx, b[3]=notzx, b[4]=notzx, b[5]=notzx, b[6]=notzx, 
    b[7]=notzx, b[8]=notzx, b[9]=notzx, b[10]=notzx, b[11]=notzx, b[12]=notzx, b[13]=notzx, 
-   b[14]=notzx, b[15]=notzx, out=xandnotzx0, out=xandnotzx1, out=xandnotzx2, out=xandnotzx3,
-   out=xandnotzx4, out=xandnotzx5, out=xandnotzx6, out=xandnotzx7, out=xandnotzx8, 
-   out=xandnotzx9, out=xandnotzx10, out=xandnotzx11, out=xandnotzx12, out=xandnotzx13, 
-   out=xandnotzx14, out=xandnotzx15);    
+   b[14]=notzx, b[15]=notzx, out[0]=xandnotzx0, out[1]=xandnotzx1, out[2]=xandnotzx2, out[3]=xandnotzx3,
+   out[4]=xandnotzx4, out[5]=xandnotzx5, out[6]=xandnotzx6, out[7]=xandnotzx7, out[8]=xandnotzx8, 
+   out[9]=xandnotzx9, out[10]=xandnotzx10, out[11]=xandnotzx11, out[12]=xandnotzx12, out[13]=xandnotzx13, 
+   out[14]=xandnotzx14, out[15]=xandnotzx15);    
    
    //If nz is true and the input is false, then the output is true.
    //If nz is false but the input is true, then the output is true.
